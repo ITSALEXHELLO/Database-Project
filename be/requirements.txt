@@ -1,0 +1,5 @@
+flask
+sqlalchemy
+Flask-SQLAlchemy
+requests
+flask_restful
