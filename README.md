@@ -1,3 +1,3 @@
 # Database Systems Project
-## Title:
-### Team members: 
+## Title: Group Ordering & Kitchen Management system
+### Team members: Pranav Shridhar, Seth Strzechowski, Alexander Yarkulov, Dhanush Bommavaram
