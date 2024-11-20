@@ -4,32 +4,23 @@ channels:
   - https://repo.anaconda.com/pkgs/main
   - https://repo.anaconda.com/pkgs/r
 dependencies:
-  - blinker=1.6.2=py39hca03da5_0
+  - bzip2=1.0.8=h80987f9_6
   - ca-certificates=2024.9.24=hca03da5_0
-  - click=8.1.7=py39hca03da5_0
-  - flask=3.0.3=py39hca03da5_0
-  - importlib-metadata=7.0.1=py39hca03da5_0
-  - itsdangerous=2.2.0=py39hca03da5_0
-  - jinja2=3.1.4=py39hca03da5_1
+  - expat=2.6.3=h313beb8_0
   - libcxx=14.0.6=h848a8c0_0
   - libffi=3.4.4=hca03da5_1
-  - libprotobuf=3.17.2=h98b2900_1
-  - markupsafe=2.1.3=py39h80987f9_0
-  - mysql-connector-c=6.1.11=h4a942e0_1
-  - mysql-connector-python=8.0.18=py39h83e661a_1
   - ncurses=6.4=h313beb8_0
-  - openssl=1.1.1w=h1a28f6b_0
-  - pip=24.2=py39hca03da5_0
-  - protobuf=3.17.2=py39hc377ac9_0
-  - python=3.9.18=hc0d8a6c_0
+  - openssl=3.0.15=h80987f9_0
+  - pip=24.2=py312hca03da5_0
+  - python=3.12.7=h99e199e_0
   - readline=8.2=h1a28f6b_0
-  - setuptools=75.1.0=py39hca03da5_0
-  - six=1.16.0=pyhd3eb1b0_1
+  - setuptools=75.1.0=py312hca03da5_0
   - sqlite=3.45.3=h80987f9_0
   - tk=8.6.14=h6ba3021_0
   - tzdata=2024b=h04d1e81_0
-  - werkzeug=3.0.6=py39hca03da5_0
-  - wheel=0.44.0=py39hca03da5_0
+  - wheel=0.44.0=py312hca03da5_0
   - xz=5.4.6=h80987f9_1
-  - zipp=3.20.2=py39hca03da5_0
   - zlib=1.2.13=h18a0788_1
+  - pip:
+      - mysql-connector-python==9.1.0
+prefix: /opt/miniconda3/envs/480Proj
