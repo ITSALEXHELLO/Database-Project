@@ -2,21 +2,28 @@ import mysql.connector
 import getpass
 
 print("************ DATABASE CONSTRUCTION UTILITY ************")
+print("Connecting to default localhost:3306")
 
-getpass.getpass
+username = input("MySQL Username: ").strip()
+password = getpass.getpass("MySQL password: ").strip()
 
 credentials = {
     "host": "localhost",
-    "user": "root",
-    "password": "warmachinerox"
+    "user": username,
+    "password": password
 }
 
-connection = mysql.connector.connect(
-    host="localhost",
-    user="root",      # Replace with your MySQL username
-    password="warmachinerox"   # Replace with your MySQL password
-)
-
 with mysql.connector.connect(**credentials) as connection:
-    print("Wahooooooo!!!!!")
 
+    cursor = connection.cursor()
+    cursor.execute("DROP DATABASE IF EXISTS RESTAURANT_DB")
+    cursor.execute("CREATE DATABASE RESTAURANT_DB")
+    print("Database RESTAURANT_DB created successfully.")
+
+credentials["database"] = "RESTAURANT_DB"
+
+    # Connect to MySQL server
+with mysql.connector.connect(**credentials) as connection:
+    cursor = connection.cursor()
+
+    
