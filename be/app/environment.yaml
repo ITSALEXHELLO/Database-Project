@@ -1,0 +1,28 @@
+name: 480Proj
+channels:
+  - conda-forge
+  - defaults
+  - https://repo.anaconda.com/pkgs/main
+  - https://repo.anaconda.com/pkgs/r
+dependencies:
+  - python=3.12
+  - pip
+  - bzip2
+  - ca-certificates
+  - expat
+  - libcxx
+  - libffi
+  - ncurses
+  - openssl
+  - readline
+  - setuptools
+  - sqlite
+  - tk
+  - tzdata
+  - wheel
+  - xz
+  - zlib
+  - flask
+  - pip:
+      - mysql-connector-python==9.1.0  
+prefix: /opt/miniconda3/envs/480Proj

@@ -1,16 +1,15 @@
+import os
 import mysql.connector
 import getpass
 
 print("************ DATABASE CONSTRUCTION UTILITY ************")
 print("Connecting to default localhost:3306")
 
-username = input("MySQL Username: ").strip()
-password = getpass.getpass("MySQL password: ").strip()
-
 credentials = {
-    "host": "localhost",
-    "user": username,
-    "password": password
+    "host": os.getenv('MYSQL_HOST'),
+    "user": os.getenv('MYSQL_USER'),
+    'password': os.getenv('MYSQL_PASSWORD'),
+    'database': os.getenv('MYSQL_DB'),
 }
 
 with mysql.connector.connect(**credentials) as connection:
@@ -20,7 +19,7 @@ with mysql.connector.connect(**credentials) as connection:
     cursor.execute("CREATE DATABASE RESTAURANT_DB")
     print("Database RESTAURANT_DB created successfully.")
 
-    credentials["database"] = "RESTAURANT_DB"
+    # credentials["database"] = "RESTAURANT_DB"
 
 
     # Connect to MySQL server
