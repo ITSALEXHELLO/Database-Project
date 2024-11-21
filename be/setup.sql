@@ -1,6 +1,3 @@
--- Active: 1729031463261@@127.0.0.1@3306
-
-
 CREATE TABLE Customer (
     customer_id INT PRIMARY KEY,
     first_name varchar(20) NOT NULL,
@@ -52,7 +49,7 @@ CREATE TABLE FoodOrder (
     reservation_id INT REFERENCES Reservation(reservation_id),
     total_amount DECIMAL(10, 2) NOT NULL,
     payment_reference varchar(4) NOT NULL
-)
+);
 
 CREATE TABLE OrderItem (
     order_id INT REFERENCES FoodOrder(order_id),
