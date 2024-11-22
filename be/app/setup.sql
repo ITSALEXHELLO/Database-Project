@@ -31,7 +31,7 @@ CREATE TABLE Ingredient (
 );
 
 CREATE TABLE FoodOrder (
-    order_id INT PRIMARY KEY,
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
     payment_reference varchar(4) NOT NULL
 );
 

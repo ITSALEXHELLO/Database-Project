@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import mysql.connector
 import os
+import stripe
 
 app = Flask(__name__)
 
@@ -17,6 +18,56 @@ connection = mysql.connector.connect(
         password=os.getenv('MYSQL_PASSWORD'), # Use environment variable
         database=os.getenv('MYSQL_DB')        # Use environment variable
     )
+connection.autocommit = True
+
+# Set your secret key
+stripe.api_key = os.getenv('STRIPE_API_KEY')
+endpoint_secret = os.getenv('ENDPOINT_SECRET')  # Secret for verifying webhook authenticity
+
+intentToOrderItems={}
+
+@app.route('/webhook', methods=['POST'])
+def stripe_webhook():
+    payload = request.get_data(as_text=True)
+    sig_header = request.headers.get('Stripe-Signature')
+
+    try:
+        # Verify the webhook signature to ensure it's from Stripe
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+
+        # Handle the event based on its type
+        if event['type'] == 'payment_intent.succeeded':
+            # delete from database
+            payment_intent = event['data']['object']  # Contains the canceled payment intent
+            payment_intent_id = payment_intent['id']
+
+            order(intentToOrderItems[payment_intent_id],payment_intent_id)
+            # You can now update your database or take appropriate action
+            # For example, set the order status to canceled
+
+    except ValueError as e:
+        # Invalid payload
+        print("Invalid payload")
+
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        print("Invalid signature")
+    
+def order(data,payment_reference):
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute('INSERT INTO FoodOrder(payment_reference) Values (%d,%s)', (payment_reference))
+    order_id = cursor.lastrowid
+    
+    for i in data:
+        menu_item_id = i.get("menu_item_id")
+        quantity = i.get("quantity")
+        special_instructions = i.get("special_instructions")
+
+        cursor.execute('INSERT INTO OrderItem(order_id,menu_item_id,quantity,special_instructions) VALUES (%d, %d, %d, %s)', (order_id,menu_item_id,quantity,special_instructions))
+    intentToOrderItems.pop(payment_intent_id)
+    cursor.close()
 
 def getCustomerIdByEmail(email):
 
@@ -26,8 +77,58 @@ def getCustomerIdByEmail(email):
     customer = cursor.fetchone()
 
     cursor.close()
-    connection.close()
     return customer
+
+def getTableFromCode(code):
+
+    cursor = connection.cursor(dictionary=True)
+
+    cursor.execute('SELECT table_id FROM FoodTable WHERE access_code = %s', (code))
+    tableId = cursor.fetchone()
+
+    cursor.close()
+    return tableId
+
+def getPriceOfMenuItem(menu_item_id):
+
+    cursor = connection.cursor(dictionary=True)
+
+    cursor.execute('SELECT price FROM MenuItem WHERE menu_item_id = %s', (menu_item_id))
+    price = cursor.fetchone()
+
+    cursor.close()
+    return price
+
+@app.route("/createPaymentIntent", methods=["POST"])
+def createPaymentIntent():
+    cursor = connection.cursor(dictionary=True)
+    try:
+        amount = 0
+        
+        data = request.get_json()
+        cursor = connection.cursor(dictionary=True)
+        for i in data:
+            menu_item_id = i.get("menu_item_id")
+            quantity = i.get("quantity")
+            amount+=quantity*getPriceOfMenuItem(menu_item_id)
+            
+        # Create a PaymentIntent with the amount and currency
+        payment_intent = stripe.PaymentIntent.create(
+            amount=amount,
+            currency='usd'
+        )
+
+        intentToOrderItems[payment_intent.id]=data
+
+        # Send back the client secret to the frontend
+        return jsonify({
+            'clientSecret': payment_intent.client_secret
+        })
+
+    except Exception as e:
+        return jsonify(error=str(e)), 500
+    finally:
+        cursor.close()
 
 @app.route("/menu", methods=["GET"])
 def getMenu():
@@ -54,16 +155,14 @@ def createCustomer():
     try:
         # Insert the new user into the users table
         cursor.execute('INSERT INTO Customer(first_name,last_name,phone_number,email) VALUES (%s, %s, %s, %s)', (first_name,last_name,phone_number,email))
-        connection.commit()
     except Exception as err:
-        connection.rollback()  # Rollback any changes if an error occurs
         return jsonify({"error": f"Database error: {err}"}), 500
     finally:
         cursor.close()
 
     # Return a success message with the newly created user data
     return jsonify({
-        "message": "User created successfully"
+        "message": "Customer created successfully"
     }), 201
 
 if __name__ == '__main__':
