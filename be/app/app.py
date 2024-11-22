@@ -132,6 +132,17 @@ def getMenu():
     
     return jsonify(menu_items)
 
+@app.route("/menu/sorted/", methods=["GET"])
+def getMenuSorted():
+    cursor = connection.cursor(dictionary=True)
+    
+    # Query the menu table and sort items by price in ascending order
+    cursor.execute('SELECT * FROM MenuItem ORDER BY price ASC')
+    sorted_menu_items = cursor.fetchall()
+    cursor.close()
+    
+    return jsonify(sorted_menu_items)
+
 @app.route("/createCustomer", methods=["POST"])
 def createCustomer():
     # Get JSON data from the request body
