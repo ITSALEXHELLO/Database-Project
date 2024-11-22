@@ -25,4 +25,4 @@ ENV PATH /opt/conda/envs/480Proj/bin:$PATH
 EXPOSE 5000
 
 # Run the application
-CMD ["wait-for-it", "mysql:3306", "--", "python", "database_construction.py", "&&", "python", "app.py"]
+CMD ["bash", "-c", "wait-for-it mysql:3306 -- python database_construction.py && exec python app.py"]
