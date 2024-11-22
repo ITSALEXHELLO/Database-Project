@@ -3,7 +3,7 @@ import mysql.connector
 import getpass
 
 print("************ DATABASE CONSTRUCTION UTILITY ************")
-print("Connecting to default localhost:3306")
+print("Connecting to default mysql:3306")
 
 credentials = {
     "host": os.getenv('MYSQL_HOST'),
@@ -15,9 +15,9 @@ credentials = {
 with mysql.connector.connect(**credentials) as connection:
     connection.autocommit = True
     cursor = connection.cursor()
-    # cursor.execute("DROP DATABASE IF EXISTS RESTAURANT_DB")
-    cursor.execute("CREATE DATABASE IF NOT EXISTS RESTAURANT_DB")
-    # print("Database RESTAURANT_DB created successfully.")
+    cursor.execute("DROP DATABASE IF EXISTS RESTAURANT_DB")
+    cursor.execute("CREATE DATABASE RESTAURANT_DB")
+    print("Database RESTAURANT_DB created successfully.")
 
     # credentials["database"] = "RESTAURANT_DB"
 
