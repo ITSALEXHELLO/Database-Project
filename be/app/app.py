@@ -143,6 +143,35 @@ def getMenuSorted():
     
     return jsonify(sorted_menu_items)
 
+@app.route("/login", methods=["GET"])
+def login():
+    # Get JSON data from the request body
+    data = request.get_json()
+
+    # Extract the fields from the JSON data
+    email = data.get("email")
+
+    cursor = connection.cursor(dictionary=True)
+
+    try:
+        # Insert the new user into the users table
+        count=cursor.execute('SELECT COUNT(*) FROM Customer WHERE email = %s', (email))
+        if(count>0):
+            return jsonify({
+                "message": "Customer Exists"
+            }), 201
+        else:
+            return jsonify({
+                "message": "Customer Doesn't exist"
+            }), 500
+    except Exception as err:
+        return jsonify({
+                "message": "Customer Doesn't exist"
+            }), 500
+    finally:
+        cursor.close()
+    
+
 @app.route("/createCustomer", methods=["POST"])
 def createCustomer():
     # Get JSON data from the request body
