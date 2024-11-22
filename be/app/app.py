@@ -66,7 +66,7 @@ def order(data,payment_reference):
         special_instructions = i.get("special_instructions")
 
         cursor.execute('INSERT INTO OrderItem(order_id,menu_item_id,quantity,special_instructions) VALUES (%d, %d, %d, %s)', (order_id,menu_item_id,quantity,special_instructions))
-    intentToOrderItems.pop(payment_intent_id)
+    intentToOrderItems.pop(payment_reference)
     cursor.close()
 
 def getCustomerIdByEmail(email):
