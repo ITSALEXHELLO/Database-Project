@@ -165,9 +165,7 @@ def login():
                 "message": "Customer Doesn't exist"
             }), 500
     except Exception as err:
-        return jsonify({
-                "message": "Customer Doesn't exist"
-            }), 500
+        return jsonify({"error": f"Database error: {err}"}), 500
     finally:
         cursor.close()
     
