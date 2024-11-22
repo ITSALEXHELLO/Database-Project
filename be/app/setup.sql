@@ -1,9 +1,8 @@
 CREATE TABLE Customer (
-    customer_id INT PRIMARY KEY,
     first_name varchar(20) NOT NULL,
     last_name varchar(20) NOT NULL,
     phone_number varchar(11) NOT NULL,
-    email varchar(60) UNIQUE
+    email varchar(60) PRIMARY KEY
 );
 
 CREATE TABLE FoodTable (
@@ -33,7 +32,8 @@ CREATE TABLE Ingredient (
 CREATE TABLE FoodOrder (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     table_id INT REFERENCES FoodTable(table_id),
-    payment_reference varchar(4) NOT NULL
+    payment_reference varchar(4) NOT NULL,
+    email varchar(60) REFERENCES Customer(email)
 );
 
 CREATE TABLE OrderItem (

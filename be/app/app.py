@@ -66,20 +66,11 @@ def order(data,payment_reference):
         menu_item_id = i.get("menu_item_id")
         quantity = i.get("quantity")
         special_instructions = i.get("special_instructions")
+        email = i.get("email")
 
-        cursor.execute('INSERT INTO OrderItem(order_id,menu_item_id,quantity,special_instructions) VALUES (%d, %d, %d, %s)', (order_id,menu_item_id,quantity,special_instructions))
+        cursor.execute('INSERT INTO OrderItem(email,order_id,menu_item_id,quantity,special_instructions) VALUES (%s, %d, %d, %d, %s)', (email,order_id,menu_item_id,quantity,special_instructions))
     intentToOrderItems.pop(payment_reference)
     cursor.close()
-
-def getCustomerIdByEmail(email):
-
-    cursor = connection.cursor(dictionary=True)
-
-    cursor.execute('SELECT customer_id FROM Customer WHERE email = %s', (email))
-    customer = cursor.fetchone()
-
-    cursor.close()
-    return customer
 
 def getTableFromCode(code):
 
