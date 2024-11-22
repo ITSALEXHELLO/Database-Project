@@ -154,7 +154,6 @@ def login():
     cursor = connection.cursor(dictionary=True)
 
     try:
-        # Insert the new user into the users table
         count=cursor.execute('SELECT COUNT(*) FROM Customer WHERE email = %s', (email))
         if(count>0):
             return jsonify({
@@ -184,14 +183,13 @@ def createCustomer():
     cursor = connection.cursor(dictionary=True)
 
     try:
-        # Insert the new user into the users table
+        # Insert the new customer 
         cursor.execute('INSERT INTO Customer(first_name,last_name,phone_number,email) VALUES (%s, %s, %s, %s)', (first_name,last_name,phone_number,email))
     except Exception as err:
         return jsonify({"error": f"Database error: {err}"}), 500
     finally:
         cursor.close()
 
-    # Return a success message with the newly created user data
     return jsonify({
         "message": "Customer created successfully"
     }), 201
