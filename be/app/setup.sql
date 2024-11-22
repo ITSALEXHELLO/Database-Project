@@ -32,6 +32,7 @@ CREATE TABLE Ingredient (
 
 CREATE TABLE FoodOrder (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
+    table_id INT REFERENCES FoodTable(table_id),
     payment_reference varchar(4) NOT NULL
 );
 

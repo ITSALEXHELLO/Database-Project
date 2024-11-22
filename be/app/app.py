@@ -57,7 +57,9 @@ def stripe_webhook():
     
 def order(data,payment_reference):
     cursor = connection.cursor(dictionary=True)
-    cursor.execute('INSERT INTO FoodOrder(payment_reference) Values (%d,%s)', (payment_reference))
+    access_code=data[0].get("access_code")
+    table_id=getTableFromCode(access_code)
+    cursor.execute('INSERT INTO FoodOrder(table_id,payment_reference) Values (%d,%s)', (table_id,payment_reference))
     order_id = cursor.lastrowid
     
     for i in data:
