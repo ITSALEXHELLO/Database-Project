@@ -18,6 +18,16 @@ connection = mysql.connector.connect(
         database=os.getenv('MYSQL_DB')        # Use environment variable
     )
 
+def getCustomerIdByEmail(email):
+
+    cursor = connection.cursor(dictionary=True)
+
+    cursor.execute('SELECT customer_id FROM Customer WHERE email = %s', (email))
+    customer = cursor.fetchone()
+
+    cursor.close()
+    connection.close()
+    return customer
 
 @app.route("/menu", methods=["GET"])
 def getMenu():

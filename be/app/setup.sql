@@ -12,13 +12,6 @@ CREATE TABLE FoodTable (
     capacity INT CHECK (capacity > 0)
 );
 
-CREATE TABLE Reservation  (
-    reservation_id INT PRIMARY KEY,
-    customer_id INT REFERENCES Customer(customer_id),
-    table_id INT REFERENCES FoodTable(table_id),
-    start_time DATETIME NOT NULL,
-    end_time DATETIME
-);
 
 CREATE TABLE MenuItem (
     menu_item_id INT PRIMARY KEY,
@@ -39,7 +32,6 @@ CREATE TABLE Ingredient (
 
 CREATE TABLE FoodOrder (
     order_id INT PRIMARY KEY,
-    reservation_id INT REFERENCES Reservation(reservation_id),
     payment_reference varchar(4) NOT NULL
 );
 
