@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import './style/Login.css'; // Ensure you have the correct path to your CSS file
+import './style/Login.css';
 
 interface LoginProps {
   setIsAuthenticated: (isAuthenticated: boolean) => void;
