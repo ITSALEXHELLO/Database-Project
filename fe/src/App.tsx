@@ -1,29 +1,28 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
-import './style/App.css';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
 import Menu from './Menu';
 
-function App() {
-  const [isRegistering, setIsRegistering] = useState(false);
+const App: React.FC = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   return (
     <Router>
-      <div className="App">
-        <Switch>
-          <Route path="/menu/:tableNumber" component={Menu} />
-          <Route path="/">
-            {isRegistering ? (
-              <Register setIsRegistering={setIsRegistering} />
-            ) : (
-              <Login setIsRegistering={setIsRegistering} />
-            )}
-          </Route>
-        </Switch>
-      </div>
+      <Switch>
+        <Route path="/login">
+          <Login setIsAuthenticated={setIsAuthenticated} />
+        </Route>
+        <Route path="/register">
+          <Register setIsAuthenticated={setIsAuthenticated} />
+        </Route>
+        <Route path="/menu/:tableNumber">
+          {isAuthenticated ? <Menu /> : <Redirect to="/login" />}
+        </Route>
+        <Redirect from="/" to="/login" />
+      </Switch>
     </Router>
   );
-}
+};
 
 export default App;

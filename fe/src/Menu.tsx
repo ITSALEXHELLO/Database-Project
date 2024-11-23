@@ -1,22 +1,38 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams} from 'react-router-dom';
+import axios from 'axios';
 import './style/Menu.css';
+
+interface MenuItem {
+  menu_item_id: number;
+  price: number;
+  name: string;
+  description?: string;
+  category: string;
+}
 
 const Menu: React.FC = () => {
   const { tableNumber } = useParams<{ tableNumber: string }>();
   const [searchTerm, setSearchTerm] = useState('');
   const [category, setCategory] = useState('All');
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+
+  useEffect(() => {
+    const fetchMenuItems = async () => {
+      try {
+        const response = await axios.get('/menu');
+        setMenuItems(response.data);
+      } catch (error) {
+        console.error('Error fetching menu items:', error);
+      }
+    };
+
+    fetchMenuItems();
+  }, []);
 
   const categories = ['All', 'Appetizers', 'Main Courses', 'Desserts', 'Beverages'];
-  const menuItems = [
-    { name: 'Spring Rolls', category: 'Appetizers' },
-    { name: 'Grilled Chicken', category: 'Main Courses' },
-    { name: 'Chocolate Cake', category: 'Desserts' },
-    { name: 'Lemonade', category: 'Beverages' },
-    // Add more items as needed
-  ];
 
-  const filteredItems = menuItems.filter(item =>
+  const filteredItems = menuItems.filter((item: MenuItem) =>
     (category === 'All' || item.category === category) &&
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -39,8 +55,10 @@ const Menu: React.FC = () => {
       </div>
       <div className="menu-items">
         {filteredItems.map(item => (
-          <div key={item.name} className="menu-item">
-            {item.name}
+          <div key={item.menu_item_id} className="menu-item">
+            <h3>{item.name}</h3>
+            <p>{item.description}</p>
+            <p>Price: ${item.price.toFixed(2)}</p>
           </div>
         ))}
       </div>
