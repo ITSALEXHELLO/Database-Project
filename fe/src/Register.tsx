@@ -17,18 +17,18 @@ const Register: React.FC<RegisterProps> = ({ setAuthenticatedEmail}) => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // const response = await axios.post('/createCustomer', {
-      //   first_name: firstName,
-      //   last_name: lastName,
-      //   phone_number: phone,
-      //   email,
-      // });
-      // if (response.status === 201) {
+      const response = await axios.post('/createCustomer', {
+        first_name: firstName,
+        last_name: lastName,
+        phone_number: phone,
+        email,
+      });
+      if (response.status === 201) {
           setAuthenticatedEmail(email);
           history.push('/menu');
-      // } else {
-      //   alert(response.data.message);
-      // }
+      } else {
+        alert(response.data.message);
+      }
     } catch (error) {
       console.error('Registration error:', error);
       alert('Registration failed. Please try again.');

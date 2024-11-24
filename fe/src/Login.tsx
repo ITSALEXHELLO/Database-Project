@@ -27,15 +27,15 @@ const Login: React.FC<LoginProps> = ({ setAuthenticatedEmail, setTableNumber }) 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // const response = await axios.get('/login', {
-      //   params: { email },
-      // });
-      // if (response.status === 201) {
+      const response = await axios.get('/login', {
+        params: { email },
+      });
+      if (response.status === 201) {
           setAuthenticatedEmail(email);
           history.push('/menu');
-      // } else {
-      //   alert(response.data.message);
-      // }
+      } else {
+        alert(response.data.message);
+      }
     } catch (error) {
       console.error('Login error:', error);
       alert('Login failed. Please try again.');

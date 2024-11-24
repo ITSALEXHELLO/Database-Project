@@ -20,23 +20,23 @@ const Menu: React.FC = () => {
 
   useEffect(() => {
     const fetchMenuItems = async () => {
-      // try {
-      //   const response = await axios.get('/menu');
-      //   setMenuItems(response.data);
-      // } catch (error) {
-      //   console.error('Error fetching menu items:', error);
-      // }
+      try {
+        const response = await axios.get('/menu');
+        setMenuItems(response.data);
+      } catch (error) {
+        console.error('Error fetching menu items:', error);
+      }
     };
-    // fetchMenuItems();
-    const dummyMenuItems: MenuItem[] = [
-      { menu_item_id: 1, price: 10.99, name: 'Burger', description: 'A delicious burger', category: 'Main Courses' },
-      { menu_item_id: 2, price: 5.99, name: 'Fries', description: 'Crispy fries', category: 'Appetizers' },
-      { menu_item_id: 3, price: 7.99, name: 'Salad', description: 'Fresh garden salad', category: 'Appetizers' },
-      { menu_item_id: 4, price: 12.99, name: 'Steak', description: 'Juicy steak', category: 'Main Courses' },
-      { menu_item_id: 5, price: 3.99, name: 'Ice Cream', description: 'Vanilla ice cream', category: 'Desserts' },
-      { menu_item_id: 6, price: 2.99, name: 'Soda', description: 'Refreshing soda', category: 'Beverages' },
-    ];
-    setMenuItems(dummyMenuItems);
+    fetchMenuItems();
+    // const dummyMenuItems: MenuItem[] = [
+    //   { menu_item_id: 1, price: 10.99, name: 'Burger', description: 'A delicious burger', category: 'Main Courses' },
+    //   { menu_item_id: 2, price: 5.99, name: 'Fries', description: 'Crispy fries', category: 'Appetizers' },
+    //   { menu_item_id: 3, price: 7.99, name: 'Salad', description: 'Fresh garden salad', category: 'Appetizers' },
+    //   { menu_item_id: 4, price: 12.99, name: 'Steak', description: 'Juicy steak', category: 'Main Courses' },
+    //   { menu_item_id: 5, price: 3.99, name: 'Ice Cream', description: 'Vanilla ice cream', category: 'Desserts' },
+    //   { menu_item_id: 6, price: 2.99, name: 'Soda', description: 'Refreshing soda', category: 'Beverages' },
+    // ];
+    // setMenuItems(dummyMenuItems);
   }, []);
 
   const categories = ['All', 'Appetizers', 'Main Courses', 'Desserts', 'Beverages'];
