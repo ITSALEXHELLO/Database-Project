@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useParams} from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import './style/Menu.css';
+import { useCart } from './CartContext';
 
 interface MenuItem {
   menu_item_id: number;
@@ -16,18 +17,33 @@ const Menu: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [category, setCategory] = useState('All');
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchMenuItems = async () => {
-      try {
-        const response = await axios.get('/menu');
-        setMenuItems(response.data);
-      } catch (error) {
-        console.error('Error fetching menu items:', error);
-      }
+      // try {
+      //   const response = await axios.get('/menu');
+      //   setMenuItems(response.data);
+      // } catch (error) {
+      //   console.error('Error fetching menu items:', error);
+      // }
     };
-
-    fetchMenuItems();
+    // fetchMenuItems();
+    const dummyMenuItems: MenuItem[] = [
+      { menu_item_id: 1, price: 10.99, name: 'Burger', description: 'A delicious burger', category: 'Main Courses' },
+      { menu_item_id: 2, price: 5.99, name: 'Fries', description: 'Crispy fries', category: 'Appetizers' },
+      { menu_item_id: 3, price: 7.99, name: 'Salad', description: 'Fresh garden salad', category: 'Appetizers' },
+      { menu_item_id: 4, price: 12.99, name: 'Steak', description: 'Juicy steak', category: 'Main Courses' },
+      { menu_item_id: 5, price: 3.99, name: 'Ice Cream', description: 'Vanilla ice cream', category: 'Desserts' },
+      { menu_item_id: 6, price: 2.99, name: 'Soda', description: 'Refreshing soda', category: 'Beverages' },
+      { menu_item_id: 1, price: 10.99, name: 'Burger', description: 'A delicious burger', category: 'Main Courses' },
+      { menu_item_id: 2, price: 5.99, name: 'Fries', description: 'Crispy fries', category: 'Appetizers' },
+      { menu_item_id: 3, price: 7.99, name: 'Salad', description: 'Fresh garden salad', category: 'Appetizers' },
+      { menu_item_id: 4, price: 12.99, name: 'Steak', description: 'Juicy steak', category: 'Main Courses' },
+      { menu_item_id: 5, price: 3.99, name: 'Ice Cream', description: 'Vanilla ice cream', category: 'Desserts' },
+      { menu_item_id: 6, price: 2.99, name: 'Soda', description: 'Refreshing soda', category: 'Beverages' },
+    ];
+    setMenuItems(dummyMenuItems);
   }, []);
 
   const categories = ['All', 'Appetizers', 'Main Courses', 'Desserts', 'Beverages'];
@@ -39,7 +55,7 @@ const Menu: React.FC = () => {
 
   return (
     <div className="menu-container">
-      <h2>Menu for Table {tableNumber}</h2>
+      <h2>Menu</h2>
       <div className="search-filter">
         <input
           type="text"
@@ -59,9 +75,13 @@ const Menu: React.FC = () => {
             <h3>{item.name}</h3>
             <p>{item.description}</p>
             <p>Price: ${item.price.toFixed(2)}</p>
+            <button onClick={() => addToCart({ ...item, quantity: 1 })}>Add to Cart</button>
           </div>
         ))}
       </div>
+      <Link to="/cart" className="cart-link">
+        <button>Go to Cart</button>
+      </Link>
     </div>
   );
 };

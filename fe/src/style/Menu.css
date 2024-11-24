@@ -1,17 +1,19 @@
 .menu-container {
-  padding: 2rem;
+  padding: 1rem; /* Reduced padding */
   background: white;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  max-width: 800px;
-  margin: 2rem auto;
+  width: calc(100% - 1rem); /* Take full width minus margin */
+  max-height: 98vh; /* Set a maximum height */
+  margin: 0.5rem; /* Thin margin on all sides */
   text-align: center;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  display: flex;
+  flex-direction: column;
 }
 
 h2 {
   margin-bottom: 1.5rem;
-  font-size: 1.5rem;
-  color: #333;
 }
 
 .search-filter {
@@ -24,8 +26,6 @@ h2 {
   width: 70%;
   padding: 0.75rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
 }
 
 .search-filter select {
@@ -37,9 +37,12 @@ h2 {
 }
 
 .menu-items {
+  flex: 1;
+  overflow-y: auto; /* Enable vertical scrolling */
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+  justify-content: center; /* Center the items horizontally */
 }
 
 .menu-item {
@@ -47,6 +50,7 @@ h2 {
   padding: 1rem;
   border-radius: 4px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  flex: 1 1 calc(33.333% - 1rem);
+  flex: 1 1 calc(30% - 2rem); /* Ensure three items per row */
+  max-width: calc(30% - 2rem); /* Ensure three items per row */
   text-align: center;
 }

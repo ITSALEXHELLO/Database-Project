@@ -1,32 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './style/Login.css';
 
 interface LoginProps {
-  setIsAuthenticated: (isAuthenticated: boolean) => void;
+  setAuthenticatedEmail: (authenticatedEmail: string) => void;
+  setTableNumber: (tableNumber: number) => void;
 }
 
-const Login: React.FC<LoginProps> = ({ setIsAuthenticated }) => {
+const Login: React.FC<LoginProps> = ({ setAuthenticatedEmail, setTableNumber }) => {
   const [email, setEmail] = useState('');
   const history = useHistory();
   const location = useLocation();
-  const tableNumber = new URLSearchParams(location.search).get('tableNumber');
+
+  useEffect(() => {
+    const tableNumber = new URLSearchParams(location.search).get('tableNumber');
+    if (tableNumber) {
+      setTableNumber(Number(tableNumber));
+      history.replace('/login');
+    }
+    else{
+      setTableNumber(0)
+    }
+  }, [location.search, setTableNumber, history]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.get('/login', {
-        params: { email },
-      });
-      if (response.status === 201) {
-        setIsAuthenticated(true);
-        if (tableNumber) {
-          history.push(`/menu/${tableNumber}`);
-        }
-      } else {
-        alert(response.data.message);
-      }
+      // const response = await axios.get('/login', {
+      //   params: { email },
+      // });
+      // if (response.status === 201) {
+          setAuthenticatedEmail(email);
+          history.push('/menu');
+      // } else {
+      //   alert(response.data.message);
+      // }
     } catch (error) {
       console.error('Login error:', error);
       alert('Login failed. Please try again.');

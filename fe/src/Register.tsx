@@ -4,35 +4,31 @@ import axios from 'axios';
 import './style/Register.css';
 
 interface RegisterProps {
-  setIsAuthenticated: (isAuthenticated: boolean) => void;
+  setAuthenticatedEmail: (authenticatedEmail: string) => void;
 }
 
-const Register: React.FC<RegisterProps> = ({ setIsAuthenticated }) => {
+const Register: React.FC<RegisterProps> = ({ setAuthenticatedEmail}) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const history = useHistory();
-  const location = useLocation();
-  const tableNumber = new URLSearchParams(location.search).get('tableNumber');
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/createCustomer', {
-        first_name: firstName,
-        last_name: lastName,
-        phone_number: phone,
-        email,
-      });
-      if (response.status === 201) {
-        setIsAuthenticated(true);
-        if (tableNumber) {
-          history.push(`/menu/${tableNumber}`);
-        }
-      } else {
-        alert(response.data.message);
-      }
+      // const response = await axios.post('/createCustomer', {
+      //   first_name: firstName,
+      //   last_name: lastName,
+      //   phone_number: phone,
+      //   email,
+      // });
+      // if (response.status === 201) {
+          setAuthenticatedEmail(email);
+          history.push('/menu');
+      // } else {
+      //   alert(response.data.message);
+      // }
     } catch (error) {
       console.error('Registration error:', error);
       alert('Registration failed. Please try again.');
