@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom';
 import { useCart } from './CartContext';
 import './style/Cart.css';
 
-const Cart: React.FC = () => {
+interface CartProps {
+  tableNumber: number;
+}
+const Cart: React.FC<CartProps> = ({tableNumber}) => {
   const { cart, removeFromCart, clearCart } = useCart();
 
   return (
@@ -13,20 +16,22 @@ const Cart: React.FC = () => {
         <p>Your cart is empty.</p>
       ) : (
         <div>
-          {cart.map(item => (
-            <div key={item.menu_item_id} className="cart-item">
-              <h3>{item.name}</h3>
-              <p>Price: ${item.price.toFixed(2)}</p>
-              <p>Quantity: {item.quantity}</p>
-              <button onClick={() => removeFromCart(item.menu_item_id)}>Remove</button>
-            </div>
-          ))}
+          <div className="cart-items-container">
+            {cart.map(item => (
+              <div key={item.menu_item_id} className="cart-item">
+                <h3>{item.name}</h3>
+                <p>Price: ${item.price.toFixed(2)}</p>
+                <p>Quantity: {item.quantity}</p>
+                <button onClick={() => removeFromCart(item.menu_item_id)}>Remove</button>
+              </div>
+            ))}
+          </div>
           <button onClick={clearCart}>Clear Cart</button>
+          <Link to="/menu">
+            <button>Back to Menu</button>
+          </Link>
         </div>
       )}
-      <Link to="/menu" className="menu-link">
-        <button>Back to Menu</button>
-      </Link>
     </div>
   );
 };

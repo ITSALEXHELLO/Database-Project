@@ -2,21 +2,36 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface CartItem {
   menu_item_id: number;
-  name: string;
   price: number;
+  name: string;
+  description?: string;
+  category: string;
   quantity: number;
 }
 
-interface CartContextType {
+interface CartContextProps {
   cart: CartItem[];
   addToCart: (item: CartItem) => void;
-  removeFromCart: (menu_item_id: number) => void;
+  removeFromCart: (menuItemId: number) => void;
   clearCart: () => void;
+  updateCartItemQuantity: (menuItemId: number, quantity: number) => void;
 }
 
-const CartContext = createContext<CartContextType | undefined>(undefined);
+interface CartProviderProps {
+  children: ReactNode;
+}
 
-export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+const CartContext = createContext<CartContextProps | undefined>(undefined);
+
+export const useCart = () => {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error('useCart must be used within a CartProvider');
+  }
+  return context;
+};
+
+export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
 
   const addToCart = (item: CartItem) => {
@@ -25,34 +40,33 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (existingItem) {
         return prevCart.map(cartItem =>
           cartItem.menu_item_id === item.menu_item_id
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
             : cartItem
         );
-      } else {
-        return [...prevCart, { ...item, quantity: 1 }];
       }
+      return [...prevCart, item];
     });
   };
 
-  const removeFromCart = (menu_item_id: number) => {
-    setCart(prevCart => prevCart.filter(cartItem => cartItem.menu_item_id !== menu_item_id));
+  const removeFromCart = (menuItemId: number) => {
+    setCart(prevCart => prevCart.filter(item => item.menu_item_id !== menuItemId));
   };
 
   const clearCart = () => {
     setCart([]);
   };
 
+  const updateCartItemQuantity = (menuItemId: number, quantity: number) => {
+    setCart(prevCart =>
+      prevCart.map(item =>
+        item.menu_item_id === menuItemId ? { ...item, quantity: Math.max(quantity, 0) } : item
+      ).filter(item => item.quantity > 0)
+    );
+  };
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, updateCartItemQuantity }}>
       {children}
     </CartContext.Provider>
   );
-};
-
-export const useCart = () => {
-  const context = useContext(CartContext);
-  if (!context) {
-    throw new Error('useCart must be used within a CartProvider');
-  }
-  return context;
 };

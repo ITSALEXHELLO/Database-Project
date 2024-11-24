@@ -24,7 +24,7 @@ const App: React.FC = () => {
             {isAuthenticated ? <Menu/> : <Redirect to="/login" />}
           </Route>
           <Route path="/cart">
-            {isAuthenticated ? <Cart /> : <Redirect to="/login" />}
+            {isAuthenticated ? <Cart tableNumber = {tableNumber}/> : <Redirect to="/login" />}
           </Route>
           <Redirect from="/" to="/login" />
         </Switch>
