@@ -7,3 +7,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:80"
+    volumes:
+      - ./src:/app/src # Mount local src folder into the container
+      - /app/node_modules # Prevent overwriting node_modules
+    environment:
+      - WATCHPACK_POLLING=true

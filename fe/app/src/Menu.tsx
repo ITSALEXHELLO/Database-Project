@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './style/Menu.css';
 import { useCart } from './CartContext';
+import { baseURL } from './App'
 
 interface MenuItem {
   menu_item_id: number;
@@ -21,7 +22,7 @@ const Menu: React.FC = () => {
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const response = await axios.get<MenuItem[]>('/menu');
+        const response = await axios.get<MenuItem[]>(`${baseURL}/menu`);
         setMenuItems(response.data);
       } catch (error) {
         console.error('Error fetching menu items:', error);

@@ -24,6 +24,7 @@ dependencies:
   - zlib
   - flask
   - stripe
+  - flask_cors
   - pip:
       - mysql-connector-python==9.1.0  
 prefix: /opt/miniconda3/envs/480Proj

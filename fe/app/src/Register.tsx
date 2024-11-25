@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './style/Register.css';
+import { baseURL } from './App';
 
 interface RegisterProps {
   setAuthenticatedEmail: (authenticatedEmail: string) => void;
@@ -22,12 +23,12 @@ const Register: React.FC<RegisterProps> = ({ setAuthenticatedEmail }) => {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post<RegisterResponse>('/createCustomer', {
+      const response = await axios.post<RegisterResponse>(`${baseURL}/createCustomer`, {
         first_name: firstName,
         last_name: lastName,
         phone_number: phone,
         email,
-      });
+      },);
 
       if (response.status === 201) {
         setAuthenticatedEmail(email);

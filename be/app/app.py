@@ -1,9 +1,12 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 import mysql.connector
 import os
 import stripe
 
 app = Flask(__name__)
+cors = CORS(app) # allow CORS for all domains on all routes.
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Get MySQL credentials from environment variables
 MYSQL_USER = os.getenv('MYSQL_USER')
@@ -27,6 +30,7 @@ endpoint_secret = os.getenv('ENDPOINT_SECRET')  # Secret for verifying webhook a
 intentToOrderItems={}
 
 @app.route('/webhook', methods=['POST'])
+@cross_origin()
 def stripe_webhook():
     payload = request.get_data(as_text=True)
     sig_header = request.headers.get('Stripe-Signature')
@@ -59,7 +63,7 @@ def order(data,payment_reference):
     cursor = connection.cursor(dictionary=True)
     access_code=data[0].get("access_code")
     table_id=getTableFromCode(access_code)
-    cursor.execute('INSERT INTO FoodOrder(table_id,payment_reference) Values (%d,%s)', (table_id,payment_reference))
+    cursor.execute('INSERT INTO FoodOrder(table_id,payment_reference) Values (%d,%s)', (table_id,payment_reference,))
     order_id = cursor.lastrowid
     
     for i in data:
@@ -68,7 +72,7 @@ def order(data,payment_reference):
         special_instructions = i.get("special_instructions")
         email = i.get("email")
 
-        cursor.execute('INSERT INTO OrderItem(email,order_id,menu_item_id,quantity,special_instructions) VALUES (%s, %d, %d, %d, %s)', (email,order_id,menu_item_id,quantity,special_instructions))
+        cursor.execute('INSERT INTO OrderItem(email,order_id,menu_item_id,quantity,special_instructions) VALUES (%s, %d, %d, %d, %s)', (email,order_id,menu_item_id,quantity,special_instructions,))
     intentToOrderItems.pop(payment_reference)
     cursor.close()
 
@@ -76,7 +80,7 @@ def getTableFromCode(code):
 
     cursor = connection.cursor(dictionary=True)
 
-    cursor.execute('SELECT table_id FROM FoodTable WHERE access_code = %s', (code))
+    cursor.execute('SELECT table_id FROM FoodTable WHERE access_code = %s', (code,))
     tableId = cursor.fetchone()
 
     cursor.close()
@@ -86,13 +90,14 @@ def getPriceOfMenuItem(menu_item_id):
 
     cursor = connection.cursor(dictionary=True)
 
-    cursor.execute('SELECT price FROM MenuItem WHERE menu_item_id = %s', (menu_item_id))
+    cursor.execute('SELECT price FROM MenuItem WHERE menu_item_id = %s', (menu_item_id,))
     price = cursor.fetchone()
 
     cursor.close()
     return price
 
 @app.route("/createPaymentIntent", methods=["POST"])
+@cross_origin()
 def createPaymentIntent():
     cursor = connection.cursor(dictionary=True)
     try:
@@ -124,6 +129,7 @@ def createPaymentIntent():
         cursor.close()
 
 @app.route("/menu", methods=["GET"])
+@cross_origin()
 def getMenu():
     cursor = connection.cursor(dictionary=True)
     cursor.execute('SELECT * FROM MenuItem')  # Query the menu table
@@ -133,6 +139,7 @@ def getMenu():
     return jsonify(menu_items)
 
 @app.route("/menu/sorted/", methods=["GET"])
+@cross_origin()
 def getMenuSorted():
     cursor = connection.cursor(dictionary=True)
     
@@ -144,17 +151,18 @@ def getMenuSorted():
     return jsonify(sorted_menu_items)
 
 @app.route("/login", methods=["GET"])
+@cross_origin()
 def login():
-    # Get JSON data from the request body
-    data = request.get_json()
 
-    # Extract the fields from the JSON data
-    email = data.get("email")
-
+    email = request.args.get("email")
+    print(email,flush=True)
     cursor = connection.cursor(dictionary=True)
 
     try:
-        count=cursor.execute('SELECT COUNT(*) FROM Customer WHERE email = %s', (email))
+        cursor.execute('SELECT COUNT(*) FROM Customer WHERE email = %s', (email,))
+        count = cursor.fetchone()['COUNT(*)']
+        print(type(count),flush=True)
+
         if(count>0):
             return jsonify({
                 "message": "Customer Exists"
@@ -170,6 +178,7 @@ def login():
     
 
 @app.route("/createCustomer", methods=["POST"])
+@cross_origin()
 def createCustomer():
     # Get JSON data from the request body
     data = request.get_json()
@@ -184,7 +193,7 @@ def createCustomer():
 
     try:
         # Insert the new customer 
-        cursor.execute('INSERT INTO Customer(first_name,last_name,phone_number,email) VALUES (%s, %s, %s, %s)', (first_name,last_name,phone_number,email))
+        cursor.execute('INSERT INTO Customer(first_name,last_name,phone_number,email) VALUES (%s, %s, %s, %s)', (first_name,last_name,phone_number,email,))
     except Exception as err:
         return jsonify({"error": f"Database error: {err}"}), 500
     finally:

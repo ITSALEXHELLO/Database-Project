@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './style/Login.css';
+import { baseURL } from './App';
 
 interface LoginProps {
   setAuthenticatedEmail: (authenticatedEmail: string) => void;
@@ -30,8 +31,8 @@ const Login: React.FC<LoginProps> = ({ setAuthenticatedEmail, setTableNumber }) 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.get<LoginResponse>('/login', {
-        params: { email },
+      const response = await axios.get<LoginResponse>(`${baseURL}/login`, {
+        params: { email }
       });
       if (response.status === 201) {
         setAuthenticatedEmail(email);
