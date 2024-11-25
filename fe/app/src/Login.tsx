@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './style/Login.css';
 
@@ -8,33 +8,36 @@ interface LoginProps {
   setTableNumber: (tableNumber: number) => void;
 }
 
+interface LoginResponse {
+  message: string;
+}
+
 const Login: React.FC<LoginProps> = ({ setAuthenticatedEmail, setTableNumber }) => {
   const [email, setEmail] = useState('');
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     const tableNumber = new URLSearchParams(location.search).get('tableNumber');
     if (tableNumber) {
       setTableNumber(Number(tableNumber));
-      history.replace('/login');
+      navigate('/login', { replace: true });
+    } else {
+      setTableNumber(0);
     }
-    else{
-      setTableNumber(0)
-    }
-  }, [location.search, setTableNumber, history]);
+  }, [location.search, setTableNumber, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.get('/login', {
+      const response = await axios.get<LoginResponse>('/login', {
         params: { email },
       });
       if (response.status === 201) {
-          setAuthenticatedEmail(email);
-          history.push('/menu');
+        setAuthenticatedEmail(email);
+        navigate('/menu');
       } else {
-        alert(response.data.message);
+        alert(response.data.message); 
       }
     } catch (error) {
       console.error('Login error:', error);
@@ -58,7 +61,7 @@ const Login: React.FC<LoginProps> = ({ setAuthenticatedEmail, setTableNumber }) 
           </div>
           <button type="submit">Login</button>
         </form>
-        <button onClick={() => history.push('/register')}>Register</button>
+        <button onClick={() => navigate('/register')}>Register</button>
       </div>
     </div>
   );

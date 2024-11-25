@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './style/Register.css';
 
@@ -7,27 +7,33 @@ interface RegisterProps {
   setAuthenticatedEmail: (authenticatedEmail: string) => void;
 }
 
-const Register: React.FC<RegisterProps> = ({ setAuthenticatedEmail}) => {
+// Define the expected structure of the response data
+interface RegisterResponse {
+  message: string;  // assuming the server responds with a message
+}
+
+const Register: React.FC<RegisterProps> = ({ setAuthenticatedEmail }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/createCustomer', {
+      const response = await axios.post<RegisterResponse>('/createCustomer', {
         first_name: firstName,
         last_name: lastName,
         phone_number: phone,
         email,
       });
+
       if (response.status === 201) {
-          setAuthenticatedEmail(email);
-          history.push('/menu');
+        setAuthenticatedEmail(email);
+        navigate('/menu');
       } else {
-        alert(response.data.message);
+        alert(response.data.message);  
       }
     } catch (error) {
       console.error('Registration error:', error);
@@ -85,7 +91,7 @@ const Register: React.FC<RegisterProps> = ({ setAuthenticatedEmail}) => {
           </div>
           <button type="submit">Register</button>
         </form>
-        <button onClick={() => history.push('/login')}>Back to Login</button>
+        <button onClick={() => navigate('/login')}>Back to Login</button>
       </div>
     </div>
   );

@@ -21,7 +21,7 @@ const Menu: React.FC = () => {
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const response = await axios.get('/menu');
+        const response = await axios.get<MenuItem[]>('/menu');
         setMenuItems(response.data);
       } catch (error) {
         console.error('Error fetching menu items:', error);
