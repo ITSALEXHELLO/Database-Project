@@ -81,7 +81,7 @@ def getTableFromCode(code):
     cursor = connection.cursor(dictionary=True)
 
     cursor.execute('SELECT table_id FROM FoodTable WHERE access_code = %s', (code,))
-    tableId = cursor.fetchone()
+    tableId = cursor.fetchone()['table_id']
 
     cursor.close()
     return tableId
@@ -91,7 +91,7 @@ def getPriceOfMenuItem(menu_item_id):
     cursor = connection.cursor(dictionary=True)
 
     cursor.execute('SELECT price FROM MenuItem WHERE menu_item_id = %s', (menu_item_id,))
-    price = cursor.fetchone()
+    price = cursor.fetchone()['price']
 
     cursor.close()
     return price
