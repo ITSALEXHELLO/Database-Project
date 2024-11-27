@@ -22,7 +22,7 @@ RUN conda env create -f /app/environment.yaml
 ENV PATH /opt/conda/envs/480Proj/bin:$PATH
 
 # Expose the port that Flask will use
-EXPOSE 5000
+EXPOSE 5001
 
 # Run the application
 CMD ["bash", "-c", "wait-for-it mysql:3306 -- python database_construction.py && exec python app.py"]
