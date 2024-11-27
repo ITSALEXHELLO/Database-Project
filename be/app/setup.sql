@@ -64,7 +64,7 @@ INSERT INTO MenuItem (menu_item_id, price, name, description, category) VALUES
 (4, 4.99, 'Garlic Bread', 'Toasted bread with garlic and butter.', 'Vegetarian'),
 (5, 12.99, 'Chicken Alfredo Pasta', 'Pasta with creamy Alfredo sauce and chicken.', 'Non Veg'),
 (6, 8.99, 'Vegan Buddha Bowl', 'Quinoa, fresh vegetables, and tahini dressing.', 'Vegan'),
-(7, 10.99, 'Halal Grilled Kebab', 'Grilled lamb kebab with spices.', 'Halal');
+(7, 10.99, 'Halal Grilled Kebab', 'Grilled lamb kebab with spices.', 'Halal'),
 (8, 11.99, 'Hamburger', 'Juicy beef patty with lettuce, tomato, and cheese in a bun.', 'Non Veg');
 
 INSERT INTO Ingredient (menu_item_id, ingredient_name, quantity)
