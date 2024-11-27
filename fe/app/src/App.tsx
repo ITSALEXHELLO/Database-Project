@@ -6,7 +6,7 @@ import Menu from './Menu';
 import Cart from './Cart';
 import { CartProvider } from './CartContext';
 
-export const baseURL='http://127.0.0.1:5000';
+export const baseURL='http://127.0.0.1:5001';
 
 const App: React.FC = () => {
   const [isAuthenticated, setAuthenticatedEmail] = useState('');
