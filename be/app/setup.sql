@@ -89,7 +89,7 @@ VALUES
 (6, 'Tahini Dressing', 1),
 (7, 'Lamb', 2),
 (7, 'Spices', 1),
-(7, 'Garlic', 1);
+(7, 'Garlic', 1),
 (8, 'Beef Patty', 1),
 (8, 'Lettuce', 1),
 (8, 'Tomato', 2),
