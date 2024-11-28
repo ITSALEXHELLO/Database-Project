@@ -36,7 +36,7 @@ const Cart: React.FC<CartProps> = ({ tableNumber }) => {
     try {
       const response = await axios.post<{ clientSecret: string }>(
         `${baseURL}/createPaymentIntent`,
-        { cart } 
+        { cart, table_number: tableNumber } 
       );
 
       const { clientSecret } = response.data;

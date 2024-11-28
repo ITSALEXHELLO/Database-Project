@@ -28,6 +28,7 @@ stripe.api_key = os.getenv('STRIPE_API_KEY')
 endpoint_secret = os.getenv('ENDPOINT_SECRET')  # Secret for verifying webhook authenticity
 
 intentToOrderItems={}
+intentToAccessCode={}
 
 @app.route('/webhook', methods=['POST'])
 @cross_origin()
@@ -47,13 +48,14 @@ def stripe_webhook():
             payment_intent = event['data']['object']  # Contains the canceled payment intent
             payment_intent_id = payment_intent['id']
             print(payment_intent_id,flush=True)
-            order(intentToOrderItems[payment_intent_id],payment_intent_id)
+            order(intentToOrderItems[payment_intent_id],intentToAccessCode[payment_intent_id],payment_intent_id)
             # You can now update your database or take appropriate action
             # For example, set the order status to canceled
         elif event['type'] == 'payment_intent.canceled':
             payment_intent = event['data']['object']  
             payment_intent_id = payment_intent['id']
             intentToOrderItems.pop(payment_intent_id)
+            intentToAccessCode.pop(payment_intent_id)
 
 
     except ValueError as e:
@@ -64,9 +66,8 @@ def stripe_webhook():
         # Invalid signature
         print("Invalid signature")
     
-def order(data,payment_reference):
+def order(data,access_code,payment_reference):
     cursor = connection.cursor(dictionary=True)
-    access_code=data[0].get("access_code")
     table_id=getTableFromCode(access_code)
     cursor.execute('INSERT INTO FoodOrder(table_id,payment_reference) Values (%d,%s)', (table_id,payment_reference,))
     order_id = cursor.lastrowid
@@ -79,6 +80,7 @@ def order(data,payment_reference):
 
         cursor.execute('INSERT INTO OrderItem(email,order_id,menu_item_id,quantity,special_instructions,stat) VALUES (%s, %d, %d, %d, %s, %s)', (email,order_id,menu_item_id,quantity,special_instructions,"TODO",))
     intentToOrderItems.pop(payment_reference)
+    intentToAccessCode.pop(payment_reference)
     cursor.close()
 
 def getTableFromCode(code):
@@ -109,6 +111,7 @@ def createPaymentIntent():
         amount = 0
         
         data = request.get_json()['cart']
+        access_code = request.get_json()['table_number']
         print(data,flush=True)
         cursor = connection.cursor(dictionary=True)
         for i in data:
@@ -123,7 +126,7 @@ def createPaymentIntent():
         )
 
         intentToOrderItems[payment_intent.id]=data
-
+        intentToAccessCode[payment_intent.id]=access_code
         # Send back the client secret to the frontend
         return jsonify({
             'clientSecret': payment_intent.client_secret

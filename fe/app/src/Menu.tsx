@@ -40,7 +40,7 @@ const Menu: React.FC = () => {
     // setMenuItems(dummyMenuItems);
   }, []);
 
-  const categories = ['All', 'Appetizers', 'Main Courses', 'Desserts', 'Beverages'];
+  const categories = ['All', 'Vegetarian', 'Non Veg', 'Vegan', 'Halal'];
 
   const filteredItems = menuItems.filter((item: MenuItem) =>
     (category === 'All' || item.category === category) &&
