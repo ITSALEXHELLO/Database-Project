@@ -12,7 +12,7 @@ CREATE TABLE FoodTable (
 );
 
 CREATE TABLE MenuItem (
-    menu_item_id INT PRIMARY KEY,
+    menu_item_id INT AUTO_INCREMENT PRIMARY KEY,
     price DECIMAL(10, 2) NOT NULL,
     name varchar(40) NOT NULL,
     description varchar(200),
@@ -57,15 +57,15 @@ INSERT INTO FoodTable (table_id, access_code, capacity) VALUES
 (11, 12355, 8),
 (12, 12356, 4);
 
-INSERT INTO MenuItem (menu_item_id, price, name, description, category) VALUES
-(1, 9.99, 'Margherita Pizza', 'Classic pizza with tomato, mozzarella, and basil.', 'Vegetarian'),
-(2, 14.99, 'Pepperoni Pizza', 'Pizza topped with pepperoni and mozzarella.', 'Non Veg'),
-(3, 7.99, 'Caesar Salad', 'Fresh lettuce, croutons, and Caesar dressing.', 'Vegetarian'),
-(4, 4.99, 'Garlic Bread', 'Toasted bread with garlic and butter.', 'Vegetarian'),
-(5, 12.99, 'Chicken Alfredo Pasta', 'Pasta with creamy Alfredo sauce and chicken.', 'Non Veg'),
-(6, 8.99, 'Vegan Buddha Bowl', 'Quinoa, fresh vegetables, and tahini dressing.', 'Vegan'),
-(7, 10.99, 'Halal Grilled Kebab', 'Grilled lamb kebab with spices.', 'Halal'),
-(8, 11.99, 'Hamburger', 'Juicy beef patty with lettuce, tomato, and cheese in a bun.', 'Non Veg');
+INSERT INTO MenuItem (price, name, description, category) VALUES
+(9.99, 'Margherita Pizza', 'Classic pizza with tomato, mozzarella, and basil.', 'Vegetarian'),
+(14.99, 'Pepperoni Pizza', 'Pizza topped with pepperoni and mozzarella.', 'Non Veg'),
+(7.99, 'Caesar Salad', 'Fresh lettuce, croutons, and Caesar dressing.', 'Vegetarian'),
+(4.99, 'Garlic Bread', 'Toasted bread with garlic and butter.', 'Vegetarian'),
+(12.99, 'Chicken Alfredo Pasta', 'Pasta with creamy Alfredo sauce and chicken.', 'Non Veg'),
+(8.99, 'Vegan Buddha Bowl', 'Quinoa, fresh vegetables, and tahini dressing.', 'Vegan'),
+(10.99, 'Halal Grilled Kebab', 'Grilled lamb kebab with spices.', 'Halal'),
+(11.99, 'Hamburger', 'Juicy beef patty with lettuce, tomato, and cheese in a bun.', 'Non Veg');
 
 INSERT INTO Ingredient (menu_item_id, ingredient_name, quantity)
 VALUES
