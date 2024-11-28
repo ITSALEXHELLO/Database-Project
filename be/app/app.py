@@ -46,10 +46,15 @@ def stripe_webhook():
             # delete from database
             payment_intent = event['data']['object']  # Contains the canceled payment intent
             payment_intent_id = payment_intent['id']
-
+            print(payment_intent_id,flush=True)
             order(intentToOrderItems[payment_intent_id],payment_intent_id)
             # You can now update your database or take appropriate action
             # For example, set the order status to canceled
+        elif event['type'] == 'payment_intent.canceled':
+            payment_intent = event['data']['object']  
+            payment_intent_id = payment_intent['id']
+            intentToOrderItems.pop(payment_intent_id)
+
 
     except ValueError as e:
         # Invalid payload
@@ -103,7 +108,8 @@ def createPaymentIntent():
     try:
         amount = 0
         
-        data = request.get_json()
+        data = request.get_json()['cart']
+        print(data,flush=True)
         cursor = connection.cursor(dictionary=True)
         for i in data:
             menu_item_id = i.get("menu_item_id")
@@ -112,7 +118,7 @@ def createPaymentIntent():
             
         # Create a PaymentIntent with the amount and currency
         payment_intent = stripe.PaymentIntent.create(
-            amount=amount,
+            amount=int(amount*100),
             currency='usd'
         )
 
