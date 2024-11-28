@@ -75,7 +75,7 @@ const Menu: React.FC = () => {
             <div key={item.menu_item_id} className="menu-item">
               <h3>{item.name}</h3>
               <p>{item.description}</p>
-              <p>Price: ${item.price.toFixed(2)}</p>
+              <p>Price: ${item.price}</p>
               {quantity === 0 ? (
                 <button onClick={() => addToCart({ ...item, quantity: 1 })}>Add to Cart</button>
               ) : (

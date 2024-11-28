@@ -20,7 +20,7 @@ const Cart: React.FC<CartProps> = ({tableNumber}) => {
             {cart.map(item => (
               <div key={item.menu_item_id} className="cart-item">
                 <h3>{item.name}</h3>
-                <p>Price: ${item.price.toFixed(2)}</p>
+                <p>Price: ${item.price}</p>
                 <p>Quantity: {item.quantity}</p>
                 <button onClick={() => removeFromCart(item.menu_item_id)}>Remove</button>
               </div>

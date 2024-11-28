@@ -128,7 +128,7 @@ def createPaymentIntent():
     finally:
         cursor.close()
 
-@app.route("/menu", methods=["GET"])
+@app.route("/menu/", methods=["GET"])
 @cross_origin()
 def getMenu():
     cursor = connection.cursor(dictionary=True)

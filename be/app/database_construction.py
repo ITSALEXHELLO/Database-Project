@@ -26,9 +26,9 @@ with mysql.connector.connect(**credentials) as connection:
 with mysql.connector.connect(**credentials) as connection:
     connection.autocommit = True
     cursor = connection.cursor()
-    # cursor.execute("SELECT DATABASE();")
-    # current_database = cursor.fetchone()[0]  # Fetch the result
-    # print(f"Currently using database: {current_database}")
+    cursor.execute("SELECT DATABASE();")
+    current_database = cursor.fetchone()[0]  # Fetch the result
+    print(f"Currently using database: {current_database}")
 
     with open("./setup.sql", "r") as f:
         sql_script = f.read()
