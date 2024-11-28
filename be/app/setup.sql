@@ -31,14 +31,16 @@ CREATE TABLE FoodOrder (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     table_id INT REFERENCES FoodTable(table_id),
     payment_reference varchar(4) NOT NULL,
-    email varchar(60) REFERENCES Customer(email)
+    email varchar(60) REFERENCES Customer(email),
+    
 );
 
 CREATE TABLE OrderItem (
     order_id INT REFERENCES FoodOrder(order_id),
     menu_item_id INT REFERENCES MenuItem(menu_item_id),
     quantity INT NOT NULL CHECK (quantity > 0),
-    special_instructions varchar(100)
+    special_instructions varchar(100),
+    stat varchar(10) NOT NULL
 );
 
 -- POPULATE TABLES

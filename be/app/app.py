@@ -72,7 +72,7 @@ def order(data,payment_reference):
         special_instructions = i.get("special_instructions")
         email = i.get("email")
 
-        cursor.execute('INSERT INTO OrderItem(email,order_id,menu_item_id,quantity,special_instructions) VALUES (%s, %d, %d, %d, %s)', (email,order_id,menu_item_id,quantity,special_instructions,))
+        cursor.execute('INSERT INTO OrderItem(email,order_id,menu_item_id,quantity,special_instructions,stat) VALUES (%s, %d, %d, %d, %s, %s)', (email,order_id,menu_item_id,quantity,special_instructions,"TODO",))
     intentToOrderItems.pop(payment_reference)
     cursor.close()
 
@@ -200,6 +200,8 @@ def createCustomer():
     return jsonify({
         "message": "Customer created successfully"
     }), 201
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
