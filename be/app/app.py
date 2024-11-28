@@ -155,13 +155,11 @@ def getMenuSorted():
 def login():
 
     email = request.args.get("email")
-    print(email,flush=True)
     cursor = connection.cursor(dictionary=True)
 
     try:
         cursor.execute('SELECT COUNT(*) FROM Customer WHERE email = %s', (email,))
         count = cursor.fetchone()['COUNT(*)']
-        print(type(count),flush=True)
 
         if(count>0):
             return jsonify({
