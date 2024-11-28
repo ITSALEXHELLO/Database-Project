@@ -147,6 +147,16 @@ def getMenu():
     
     return jsonify(menu_items)
 
+@app.route("/categories/", methods=["GET"])
+@cross_origin()
+def getCategories():
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute('SELECT DISTINCT category FROM MenuItem')  # Query the menu table
+    categories = cursor.fetchall()
+    cursor.close()
+    
+    return jsonify(categories)
+
 @app.route("/menu/sorted/", methods=["GET"])
 @cross_origin()
 def getMenuSorted():
