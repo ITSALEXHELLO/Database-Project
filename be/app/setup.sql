@@ -31,7 +31,7 @@ CREATE TABLE FoodOrder (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     table_id INT REFERENCES FoodTable(table_id),
     payment_reference varchar(4) NOT NULL,
-    email varchar(60) REFERENCES Customer(email),
+    email varchar(60) REFERENCES Customer(email)
     
 );
 
@@ -42,8 +42,6 @@ CREATE TABLE OrderItem (
     special_instructions varchar(100),
     stat varchar(10) NOT NULL
 );
-
--- POPULATE TABLES
 
 INSERT INTO FoodTable (table_id, access_code, capacity) VALUES
 (1, 12345, 2),
