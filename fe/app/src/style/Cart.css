@@ -15,7 +15,7 @@ h2 {
 }
 
 .cart-items-container {
-  max-height: 400px; /* Adjust the height as needed */
+  max-height: calc(100vh - 470px);; /* Adjust the height as needed */
   overflow-y: auto;
   margin-bottom: 1rem;
 }
